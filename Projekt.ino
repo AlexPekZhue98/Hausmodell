@@ -82,8 +82,8 @@ const int RES_PHOTO_ON_3 = A9;
 ////////////////////////////////
 // PROGRAM CONSTANTS
 ////////////////////////////////
-const float FIRE_THRESHOLD = 0.5;
-const float VENT_THRESHOLD = 0.95;
+float FIRE_THRESHOLD[] = {0.8, 0.83, 0.8, 0.7};
+float VENT_THRESHOLD[] = {0.86, 0.86, 0.86, 0.86};
 
 ////////////////////////////////
 // INITIALIZE SERVOS
@@ -100,6 +100,8 @@ Servo roofWindow;
 // Window Positions
 int WINDOW_POS_CLOSED = 130;
 int WINDOW_POS_OPEN = 45;
+int ROOF_WINDOW_POS_CLOSED = 50;
+int ROOF_WINDOW_POS_OPEN = 130;
 
 // StaircaseDoors
 Servo staircaseDoor0;
@@ -373,11 +375,11 @@ void closeWindow(int floorNumber) {
 }
 
 void openRoofWindow() {
-  roofWindow.write(WINDOW_POS_OPEN);
+  roofWindow.write(ROOF_WINDOW_POS_OPEN);
 }
 
 void closeRoofWindow() {
-  roofWindow.write(WINDOW_POS_CLOSED);
+  roofWindow.write(ROOF_WINDOW_POS_CLOSED);
 }
 
 void openStaircaseDoor(int floorNumber) {
@@ -426,7 +428,7 @@ float calculatePercentage(float defaultValue, float defaultPhotoValue, float val
   //return (value) / (photoValue); 
 }
 
-bool isFireActive(float threshold, float defaultResPhoto[], float defaultResPhotoOn[]) {
+bool isFireActive(float threshold[], float defaultResPhoto[], float defaultResPhotoOn[]) {
   
   for (int floor = 0; floor < 4; floor++) {
       Serial.print("Floor ");
@@ -442,7 +444,7 @@ bool isFireActive(float threshold, float defaultResPhoto[], float defaultResPhot
       Serial.print(" - Percentage: ");
       Serial.println(floorFirePercentage);
       
-      if (floorFirePercentage <= threshold) {
+      if (floorFirePercentage <= threshold[floor]) {
         return true;
       }
     }
